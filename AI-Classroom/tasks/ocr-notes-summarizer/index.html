@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Extract text from study-note images and turn it into structured revision notes.">
+  <title>AI OCR Notes Summarizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="#top"><span class="brand-mark">✦</span><span>AI OCR Notes Summarizer</span></a><div class="header-tools"><span class="status-dot"></span><span>Study capture</span><div class="mode-switch" role="group" aria-label="Summary mode"><button class="mode-button active" data-mode="demo" type="button">Demo</button><button class="mode-button" data-mode="api" type="button">API</button></div></div></header>
+  <main id="top" class="page-shell">
+    <section class="hero"><div><p class="eyebrow">TASK 10 <span></span> AI CLASSROOM</p><h1>From page<br><em>to clarity.</em></h1><p>Upload handwritten or printed notes, extract the text, and shape it into a revision-ready study sheet.</p></div><div class="hero-badge"><strong>OCR<br>LAB</strong><span>Capture · Understand</span></div></section>
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+    <div class="workflow-grid">
+      <section class="panel upload-panel" aria-labelledby="upload-title"><div class="panel-heading"><div><p class="section-kicker">01 · UPLOAD</p><h2 id="upload-title">Upload your notes image</h2></div><span class="mode-badge" id="mode-badge">DEMO MODE</span></div><label class="drop-zone" id="drop-zone" for="image-input"><span class="upload-icon">↥</span><strong>Drop your notes image here</strong><span>or choose a JPG, JPEG, or PNG</span><small>Text is extracted locally in Demo Mode.</small><input id="image-input" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png"></label><div class="preview-wrap" id="preview-wrap" hidden><img id="image-preview" alt="Uploaded study notes preview"><div class="file-row"><span id="file-name"></span><button id="remove-image" type="button">Remove</button></div></div></section>
+      <section class="panel ocr-panel" aria-labelledby="ocr-title"><div class="panel-heading"><div><p class="section-kicker">02 · OCR</p><h2 id="ocr-title">Extracted Text</h2></div><span class="ocr-state" id="ocr-state">WAITING</span></div><div class="ocr-progress" id="ocr-progress" hidden><div class="progress-label"><span>🔍 Extracting text from your notes...</span><strong id="ocr-percent">0%</strong></div><div class="progress-track"><div id="ocr-bar"></div></div></div><textarea id="extracted-text" placeholder="Your recognized text will appear here. You can edit it before summarizing..."></textarea><div class="text-actions"><span id="text-count">0 characters</span><button id="edit-text" type="button">Edit Text</button><button id="clear-text" type="button">Clear Text</button></div><button class="button button-primary full-button" id="summarize-button" type="button" disabled>🧠 Summarize Notes</button></section>
+    </div>
+    <section class="panel summary-panel" aria-labelledby="summary-title"><div class="panel-heading"><div><p class="section-kicker">03 · AI SUMMARY</p><h2 id="summary-title">Your study notes</h2></div><span class="summary-state" id="summary-state">WAITING</span></div><div id="summary-loading" class="summary-loading" hidden>🧠 Creating your study notes...</div><div id="summary-empty" class="summary-empty"><div class="empty-icon">✎</div><h3>Your structured notes will appear here.</h3><p>Extract text from an image, then summarize it into clear revision sections.</p></div><article id="summary-content" class="summary-content" hidden><div class="main-topic"><span>Main Topic</span><h3 id="main-topic"></h3></div><div class="summary-grid"><section><h4>Short Summary</h4><p id="short-summary"></p></section><section><h4>Key Points</h4><ul id="key-points"></ul></section><section><h4>Important Definitions</h4><ul id="definitions"></ul></section><section><h4>Important Formulas</h4><ul id="formulas"></ul></section><section><h4>Exam Tips</h4><ul id="exam-tips"></ul></section></div></article><div class="export-actions" id="export-actions" hidden><button id="copy-notes" type="button">▣ Copy Notes</button><button id="download-txt" type="button">↓ Download TXT</button><button id="print-notes" type="button">↗ Print Notes</button></div></section>
+  </main>
+  <footer class="site-footer"><span>AI OCR Notes Summarizer</span><span>Capture. Distill. Revise.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

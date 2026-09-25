@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ask academic questions and get clear step-by-step study explanations.">
+  <title>AI Study Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="AI Study Assistant home"><span class="brand-mark" aria-hidden="true">✦</span><span>AI Study Assistant</span></a>
+    <div class="header-tools"><span class="status-dot"></span><span>Study mode</span><div class="mode-switch" role="group" aria-label="Response mode"><button class="mode-button active" data-mode="demo" type="button">Demo</button><button class="mode-button" data-mode="api" type="button">API</button></div></div>
+  </header>
+
+  <main id="top" class="app-shell">
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+    <aside class="sidebar">
+      <div class="sidebar-intro"><p class="eyebrow">TASK 07 <span></span> AI CLASSROOM</p><h1>Ask better.<br><em>Learn deeper.</em></h1><p>Clear explanations for the moments when a concept refuses to click.</p></div>
+      <div class="subject-box"><label for="subject">Study subject</label><select id="subject"><option>Java</option><option>DSA</option><option>DBMS</option><option>Web Development</option><option>Operating Systems</option><option>Computer Networks</option><option>Cloud Computing</option><option>General</option></select></div>
+      <div class="quick-box"><p class="section-kicker">QUICK QUESTIONS</p><div class="quick-actions"><button type="button" data-prompt="Explain this topic simply">Explain this topic simply</button><button type="button" data-prompt="Give me an example">Give me an example</button><button type="button" data-prompt="Explain step by step">Explain step by step</button><button type="button" data-prompt="Give me interview questions">Give me interview questions</button><button type="button" data-prompt="Give a coding example">Give a coding example</button></div></div>
+      <button class="clear-button" id="clear-chat" type="button">↺ Start a new conversation</button>
+    </aside>
+
+    <section class="chat-panel" aria-labelledby="chat-title">
+      <div class="chat-header"><div><p class="section-kicker">YOUR STUDY SPACE</p><h2 id="chat-title">Ask anything about your studies</h2></div><span class="subject-badge" id="subject-badge">JAVA</span></div>
+      <div class="conversation" id="conversation" aria-live="polite"><div class="empty-state" id="empty-state"><div class="empty-icon" aria-hidden="true">👋</div><h3>Ask me anything about your studies.</h3><p>Choose a subject, then ask a doubt in your own words. I will break it into clear steps.</p><div class="empty-suggestion"><span>Try asking</span><button type="button" data-prompt="What is the difference between ArrayList and LinkedList?">What is the difference between ArrayList and LinkedList?</button></div></div></div>
+      <div class="composer"><form id="chat-form"><label class="visually-hidden" for="question-input">Ask your academic doubt</label><textarea id="question-input" rows="2" placeholder="Ask a doubt, concept, or coding question..."></textarea><div class="composer-footer"><span>Press Enter to send · Shift + Enter for a new line</span><button class="send-button" id="send-button" type="submit"><span aria-hidden="true">↑</span> Send</button></div></form></div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>AI Study Assistant</span><span>Understand it. Use it. Remember it.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

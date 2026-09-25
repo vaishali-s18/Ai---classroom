@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate and study AI-powered flashcards from your notes.">
+  <title>AI Flashcard Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top"><span class="brand-mark">✦</span><span>AI Flashcard Generator</span></a>
+    <div class="header-tools"><span class="status-dot"></span><span>Study mode</span><div class="mode-switch" role="group" aria-label="Generation mode"><button class="mode-button active" data-mode="demo" type="button">Demo</button><button class="mode-button" data-mode="api" type="button">API</button></div></div>
+  </header>
+  <main id="top" class="page-shell">
+    <section class="hero"><div><p class="eyebrow">TASK 08 <span></span> AI CLASSROOM</p><h1>Make knowledge<br><em>stick.</em></h1><p>Turn a topic or study material into a focused deck of questions and answers built for active recall.</p></div><div class="hero-badge"><strong>RECALL<br>LAB</strong><span>One card at a time</span></div></section>
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+    <section id="setup-view" class="setup-layout" aria-label="Flashcard setup">
+      <section class="panel setup-panel"><div class="panel-heading"><div><p class="section-kicker">BUILD YOUR DECK</p><h2>What are you learning?</h2></div><span id="mode-badge" class="mode-badge">DEMO MODE</span></div><form id="flashcard-form" novalidate><label for="topic-input">Topic / Study Material</label><textarea id="topic-input" rows="8" placeholder="Paste a topic, lecture notes, textbook paragraph, or study material here..."></textarea><div class="field-note"><span>Specific notes make stronger cards.</span><span id="input-count">0 characters</span></div><div class="control-grid"><div><label for="card-count">Number of flashcards</label><select id="card-count"><option value="5">5 cards</option><option value="10" selected>10 cards</option><option value="15">15 cards</option><option value="20">20 cards</option></select></div><div><label for="difficulty">Difficulty</label><select id="difficulty"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></div></div><div class="form-actions"><button class="button button-primary" id="generate-button" type="submit">✦ Generate Flashcards</button><button class="button button-quiet" id="example-button" type="button">Try Example</button><button class="button button-quiet" id="clear-button" type="button">Clear</button></div></form><p class="privacy-note">◇ Demo Mode works locally. API Mode is ready for a secure backend.</p></section>
+      <aside class="panel guide-panel"><div class="guide-number">08</div><h2>Recall beats rereading.</h2><p>Flip, test yourself, and mark what deserves another pass.</p><div class="guide-steps"><div><b>01</b><span>Flip</span></div><div><b>02</b><span>Recall</span></div><div><b>03</b><span>Repeat</span></div></div></aside>
+    </section>
+    <section id="study-view" class="study-view" hidden aria-labelledby="study-title"><div class="study-toolbar"><div><p class="section-kicker">ACTIVE DECK</p><h2 id="study-title">Your flashcards</h2></div><div class="toolbar-actions"><button class="button button-quiet" id="study-mode-button" type="button">Study Mode</button><button class="button button-quiet" id="new-deck-button" type="button">New Deck</button></div></div><div class="progress-row"><span id="progress-label">Card 1 of 10</span><span id="progress-percent">10%</span></div><div class="progress-track"><div id="progress-bar"></div></div><div class="study-layout"><div class="main-study"><div class="flashcard-scene" id="flashcard-scene" tabindex="0" aria-label="Flashcard. Click to flip"><div class="flashcard" id="flashcard"><div class="card-face card-front"><span class="face-label">QUESTION / CONCEPT</span><strong id="card-question"></strong><span class="flip-hint">Click card or use Flip Card</span></div><div class="card-face card-back"><span class="face-label">ANSWER / EXPLANATION</span><p id="card-answer"></p><span class="flip-hint">Click card to return</span></div></div></div><div class="card-controls"><button class="button button-quiet" id="previous-button" type="button">← Previous</button><button class="button button-flip" id="flip-button" type="button">↻ Flip Card</button><button class="button button-quiet" id="next-button" type="button">Next →</button></div><div class="study-actions"><button id="important-button" type="button">☆ Mark as Important</button><button id="known-button" type="button">✓ Mark as Known</button><button id="review-button" type="button">↻ Review Again</button></div></div><aside class="deck-list-panel"><div class="list-heading"><div><p class="section-kicker">YOUR DECK</p><h3>All cards</h3></div><span id="deck-count">10</span></div><div id="deck-list" class="deck-list"></div></aside></div></section>
+    <section id="complete-view" class="complete-view" hidden aria-labelledby="complete-title"><div class="complete-icon">✓</div><p class="section-kicker">STUDY COMPLETE</p><h2 id="complete-title">Nice work. Keep the momentum.</h2><div class="complete-stats"><div><strong id="reviewed-count">0</strong><span>Cards Reviewed</span></div><div><strong id="known-count">0</strong><span>Known</span></div><div><strong id="again-count">0</strong><span>Review Again</span></div></div><button class="button button-primary" id="return-study-button" type="button">Return to Deck</button></section>
+  </main>
+  <footer class="site-footer"><span>AI Flashcard Generator</span><span>Recall. Reflect. Repeat.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create a polished, ATS-friendly resume with AI assistance.">
+  <title>AI Resume Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="AI Resume Builder home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>AI Resume Builder</span>
+      </a>
+      <div class="header-note"><span class="status-dot"></span> Your career, clearly presented</div>
+    </div>
+  </header>
+
+  <main id="top" class="app-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">TASK 01 <span></span> AI CLASSROOM</p>
+        <h1 id="page-title">Build a resume<br><em>worth remembering.</em></h1>
+        <p class="intro-copy">Turn your experience into a polished, professional story. Add your details, then let AI help you shape the words.</p>
+      </div>
+      <div class="intro-meta" aria-label="Resume builder benefits">
+        <div><strong>01</strong><span>Tell your story</span></div>
+        <div><strong>02</strong><span>Refine with AI</span></div>
+        <div><strong>03</strong><span>Share with confidence</span></div>
+      </div>
+    </section>
+
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+
+    <div class="step-flow" aria-label="Resume creation steps">
+      <span class="step active"><b>01</b> Upload sample</span><span class="step-line"></span><span class="step"><b>02</b> Add your details</span><span class="step-line"></span><span class="step"><b>03</b> Generate resume</span>
+    </div>
+
+    <section class="reference-panel panel" aria-labelledby="reference-title">
+      <div class="panel-heading reference-heading">
+        <div><p class="section-kicker">STYLE REFERENCE</p><h2 id="reference-title">1. Upload your resume sample</h2><p class="panel-subtitle">Give AI a resume whose structure, section order, and writing style you admire.</p></div>
+        <span class="file-badge">PDF / DOCX / JPG / PNG</span>
+      </div>
+      <div class="upload-layout">
+        <label class="upload-zone" id="upload-zone" for="reference-file">
+          <span class="upload-icon" aria-hidden="true">↥</span><strong>Drop a reference resume here</strong><span>or browse from your device</span><small>PDF, DOC, DOCX, JPG, or PNG up to 10 MB</small>
+          <input id="reference-file" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png">
+        </label>
+        <div class="reference-card" id="reference-card" hidden>
+          <div class="reference-file-icon" aria-hidden="true">▤</div>
+          <div class="reference-file-copy"><strong id="reference-name">Reference resume</strong><span id="reference-meta"></span><span class="analysis-status" id="analysis-status">Ready to analyze</span></div>
+          <button class="icon-button" id="remove-reference" type="button" aria-label="Remove reference resume" title="Remove reference resume">×</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="workspace-grid">
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">YOUR DETAILS</p>
+            <h2 id="form-title">2. Enter your information</h2>
+          </div>
+          <span class="required-note"><span aria-hidden="true">*</span> Required</span>
+        </div>
+
+        <form id="resume-form" novalidate>
+          <fieldset>
+            <legend>Personal details</legend>
+            <div class="field full-width">
+              <label for="full-name">Full name <span aria-hidden="true">*</span></label>
+              <input id="full-name" name="fullName" type="text" placeholder="e.g. Vaishali Bakshi" autocomplete="name" required>
+            </div>
+            <div class="field-grid two-columns">
+              <div class="field"><label for="email">Email <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required></div>
+              <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" autocomplete="tel"></div>
+              <div class="field"><label for="location">Location</label><input id="location" name="location" type="text" placeholder="Pune, India" autocomplete="address-level2"></div>
+              <div class="field"><label for="linkedin">LinkedIn</label><input id="linkedin" name="linkedin" type="url" placeholder="linkedin.com/in/yourname"></div>
+              <div class="field full-width"><label for="github">GitHub</label><input id="github" name="github" type="url" placeholder="github.com/yourname"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Education</legend>
+            <div class="field-grid two-columns">
+              <div class="field"><label for="degree">Degree / course <span aria-hidden="true">*</span></label><input id="degree" name="degree" type="text" placeholder="B.Tech in Computer Science" required></div>
+              <div class="field"><label for="university">College / university <span aria-hidden="true">*</span></label><input id="university" name="university" type="text" placeholder="University of your choice" required></div>
+              <div class="field"><label for="graduation">Graduation year</label><input id="graduation" name="graduation" type="text" placeholder="2026"></div>
+              <div class="field"><label for="grade">CGPA / percentage</label><input id="grade" name="grade" type="text" placeholder="8.7 CGPA"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Skills</legend>
+            <div class="field">
+              <label for="skills">Skills <span aria-hidden="true">*</span></label>
+              <input id="skills" name="skills" type="text" placeholder="Java, JavaScript, React, Node.js, MongoDB" required>
+              <span class="field-hint">Separate each skill with a comma.</span>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Experience &amp; objective</legend>
+            <div class="field">
+              <label for="objective">Career objective <span aria-hidden="true">*</span></label>
+              <textarea id="objective" name="objective" rows="3" placeholder="Motivated Computer Science student seeking a software development internship..." required></textarea>
+            </div>
+            <div class="field">
+              <label for="experience">Experience</label>
+              <textarea id="experience" name="experience" rows="6" placeholder="Company: Acme Labs&#10;Role: Software Intern&#10;Duration: May 2025 - July 2025&#10;Responsibilities: Built responsive interfaces...&#10;Achievements: Reduced page load time by 20%..."></textarea>
+              <span class="field-hint">Include company, role, duration, responsibilities, and achievements. Add multiple experiences one after another.</span>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Additional sections <span class="optional-label">OPTIONAL</span></legend>
+            <div class="field">
+              <label for="projects">Projects</label>
+              <textarea id="projects" name="projects" rows="5" placeholder="Project name: Campus Connect&#10;Technologies: React, Firebase&#10;Description: A student community platform...&#10;Key features: Real-time chat and event discovery"></textarea>
+            </div>
+            <div class="field-grid two-columns">
+              <div class="field"><label for="certifications">Certifications</label><textarea id="certifications" name="certifications" rows="3" placeholder="AWS Cloud Practitioner&#10;Google Data Analytics"></textarea></div>
+              <div class="field"><label for="achievements">Achievements</label><textarea id="achievements" name="achievements" rows="3" placeholder="Won first place at a campus hackathon&#10;Published research paper"></textarea></div>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button class="button button-primary" id="generate-button" type="submit"><span class="button-icon" aria-hidden="true">✦</span> Generate my resume</button>
+            <button class="button button-quiet" id="clear-button" type="button">Clear form</button>
+          </div>
+          <div class="sample-loader">
+            <span>Need a starting point?</span>
+            <label class="visually-hidden" for="sample-profile">Choose a sample profile</label>
+            <select id="sample-profile">
+              <option value="">Load sample data...</option>
+              <option value="computer-science">Computer science student</option>
+              <option value="data-science">Data science student</option>
+              <option value="frontend">Frontend developer</option>
+            </select>
+          </div>
+        </form>
+      </section>
+
+      <section class="preview-column" aria-labelledby="preview-title">
+        <div class="preview-toolbar">
+          <div><p class="section-kicker">LIVE DOCUMENT</p><h2 id="preview-title">Resume preview</h2></div>
+          <div class="preview-actions"><button class="button button-download" id="download-button" type="button" disabled><span aria-hidden="true">↓</span> Download Resume as PDF</button><button class="button button-outline" id="print-button" type="button" disabled><span aria-hidden="true">↗</span> Print / Save as PDF</button></div>
+        </div>
+        <div class="resume-paper" id="resumePreview" aria-live="polite">
+          <div class="empty-preview"><div class="empty-icon" aria-hidden="true">✦</div><h3>Your resume will appear here</h3><p>Fill in the details or load a sample profile to see your professional story take shape.</p></div>
+        </div>
+        <p class="preview-caption"><span class="caption-line"></span> A clean, ATS-friendly format designed for first impressions.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer"><span>AI Resume Builder</span><span>Made for ambitious beginnings.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

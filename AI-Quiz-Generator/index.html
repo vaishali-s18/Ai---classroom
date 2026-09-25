@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate and practice AI-powered quizzes from any study material.">
+  <title>AI Quiz Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="AI Quiz Generator home"><span class="brand-mark" aria-hidden="true">?</span><span>AI Quiz Generator</span></a>
+    <div class="header-meta"><span class="live-dot"></span><span>Practice with purpose</span><div class="mode-switch" role="group" aria-label="Generation mode"><button class="mode-button active" data-mode="demo" type="button">Demo</button><button class="mode-button" data-mode="api" type="button">API</button></div></div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div><p class="eyebrow">TASK 06 <span></span> AI CLASSROOM</p><h1>Turn notes into<br><em>better questions.</em></h1><p class="hero-copy">Generate a focused quiz from your study material, test your recall, and see exactly what to revisit.</p></div>
+      <div class="hero-stat"><strong>QUIZ<br>LAB</strong><span>Learn by retrieval</span></div>
+    </section>
+
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+
+    <section id="setup-view" class="setup-layout" aria-label="Quiz setup">
+      <section class="panel setup-panel" aria-labelledby="setup-title">
+        <div class="panel-heading"><div><p class="section-kicker">BUILD A QUIZ</p><h2 id="setup-title">What are you studying?</h2></div><span class="mode-badge" id="mode-badge">DEMO MODE</span></div>
+        <form id="quiz-form" novalidate>
+          <label for="topic-input">Topic / Study Material</label>
+          <textarea id="topic-input" rows="9" placeholder="Paste a topic, lecture notes, textbook paragraph, or study material here..."></textarea>
+          <div class="field-note"><span>Use your own words or source notes.</span><span id="input-count">0 characters</span></div>
+          <div class="control-grid">
+            <div><label for="question-count">Number of Questions</label><select id="question-count"><option value="5">5 questions</option><option value="10">10 questions</option><option value="15">15 questions</option></select></div>
+            <div><label for="difficulty">Difficulty</label><select id="difficulty"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select></div>
+            <div><label for="question-type">Question Type</label><select id="question-type"><option value="mcq">MCQ</option><option value="true-false">True / False</option><option value="mixed">Mixed</option></select></div>
+          </div>
+          <div class="form-actions"><button class="button button-primary" id="generate-button" type="submit"><span aria-hidden="true">✦</span> Generate Quiz</button><button class="button button-quiet" id="example-button" type="button">Try Example</button><button class="button button-quiet" id="clear-button" type="button">Clear</button></div>
+        </form>
+        <p class="privacy-note"><span aria-hidden="true">◇</span> Demo mode works locally. API mode is ready for your secure backend.</p>
+      </section>
+      <aside class="panel guide-panel" aria-label="Quiz workflow"><div class="guide-number">06</div><h2>Recall is a muscle.</h2><p>Answer without looking back, then use the review to close the gaps.</p><div class="guide-steps"><div><b>01</b><span>Generate</span></div><div><b>02</b><span>Recall</span></div><div><b>03</b><span>Review</span></div></div></aside>
+    </section>
+
+    <section id="quiz-view" class="quiz-view" hidden aria-labelledby="quiz-title">
+      <div class="quiz-toolbar"><div><p class="section-kicker">ACTIVE QUIZ</p><h2 id="quiz-title">Your quiz</h2></div><button class="button button-quiet" id="quit-button" type="button">Exit quiz</button></div>
+      <div class="progress-row"><span id="progress-label">Question 1 of 5</span><span id="progress-percent">20%</span></div><div class="progress-track"><div id="progress-bar"></div></div>
+      <article class="panel question-panel"><div class="question-top"><span id="question-kind">QUESTION</span><span id="difficulty-label">MEDIUM</span></div><h3 id="question-text"></h3><div id="answer-options" class="answer-options"></div><p id="answer-hint" class="answer-hint">Choose one answer to continue.</p></article>
+      <div class="quiz-actions"><button class="button button-quiet" id="previous-button" type="button">← Previous</button><button class="button button-primary" id="next-button" type="button">Next →</button><button class="button button-submit" id="submit-button" type="button" hidden>Submit Quiz</button></div>
+    </section>
+
+    <section id="results-view" class="results-view" hidden aria-labelledby="results-title">
+      <div class="results-heading"><div><p class="section-kicker">QUIZ COMPLETE</p><h2 id="results-title">Your results</h2></div><button class="button button-primary" id="new-quiz-button" type="button">New Quiz</button></div>
+      <div class="score-grid"><div class="score-card score-main"><span>Score</span><strong id="score-value">0/5</strong><small id="performance-message">Keep building your recall.</small></div><div class="score-card"><span>Correct</span><strong id="correct-value">0</strong><small>answers</small></div><div class="score-card"><span>Incorrect</span><strong id="incorrect-value">0</strong><small>to revisit</small></div><div class="score-card"><span>Percentage</span><strong id="percentage-value">0%</strong><small>overall</small></div></div>
+      <div class="review-heading"><div><p class="section-kicker">ANSWER REVIEW</p><h3>What to revisit</h3></div><span id="review-count">5 questions</span></div><div id="review-list" class="review-list"></div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>AI Quiz Generator</span><span>Recall. Reflect. Improve.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "ai-mindmap-generator",
+  "version": "1.0.0",
+  "description": "AI Mind Map Generator for Syllabus with Groq API integration",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "groq-sdk": "^0.15.0"
+  },
+  "keywords": [
+    "mindmap",
+    "ai",
+    "groq",
+    "syllabus",
+    "classroom"
+  ],
+  "author": "",
+  "license": "ISC"
+}

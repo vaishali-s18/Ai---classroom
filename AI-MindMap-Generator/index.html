@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Mind Map Generator</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- D3.js for custom mind map rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-icon">🧠</div>
+      <div class="header-text">
+        <h1>AI Mind Map Generator</h1>
+        <p>Turn your syllabus into an interactive visual mind map.</p>
+      </div>
+      <div class="header-badge">Task 4</div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main-content">
+
+    <!-- ===== INPUT SECTION ===== -->
+    <section class="card input-section">
+      <div class="section-header">
+        <span class="section-icon">📝</span>
+        <h2>Syllabus / Topic Content</h2>
+      </div>
+
+      <div class="textarea-wrapper">
+        <textarea
+          id="syllabusInput"
+          placeholder="Paste your syllabus, chapter topics, subject outline, or study material here..."
+          spellcheck="true"
+          rows="10"
+        ></textarea>
+        <div class="char-counter">
+          <span id="charCount">0</span> characters
+        </div>
+      </div>
+
+      <!-- Settings Row -->
+      <div class="settings-row">
+        <div class="setting-group">
+          <label for="depthSelect">
+            <span class="setting-icon">🔍</span> Depth
+          </label>
+          <select id="depthSelect">
+            <option value="Basic">Basic</option>
+            <option value="Detailed" selected>Detailed</option>
+            <option value="Very Detailed">Very Detailed</option>
+          </select>
+        </div>
+
+        <div class="setting-group">
+          <label for="audienceSelect">
+            <span class="setting-icon">🎓</span> Audience Level
+          </label>
+          <select id="audienceSelect">
+            <option value="School">School</option>
+            <option value="College" selected>College</option>
+            <option value="Technical">Technical</option>
+          </select>
+        </div>
+
+        <div class="setting-group mode-group">
+          <label>
+            <span class="setting-icon">⚙️</span> Mode
+          </label>
+          <div class="mode-toggle">
+            <button class="mode-btn active" id="demoModeBtn" onclick="setMode('demo')">Demo</button>
+            <button class="mode-btn" id="apiModeBtn" onclick="setMode('api')">API</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mode Description Banner -->
+      <div class="mode-description" id="modeDescription">
+        <div class="mode-desc-demo" id="modeDescDemo">
+          <span class="mode-desc-icon">🔧</span>
+          <span><strong>Demo Mode</strong> — Creates a mind map locally from your entered syllabus. No AI API required.</span>
+        </div>
+        <div class="mode-desc-api" id="modeDescApi" style="display:none;">
+          <span class="mode-desc-icon">🤖</span>
+          <span><strong>API Mode</strong> — Uses the configured AI API to generate the mind map from your syllabus.</span>
+        </div>
+      </div>
+
+      <!-- API URL row (hidden by default) -->
+      <div class="api-config" id="apiConfig" style="display:none;">
+        <label for="apiUrlInput">
+          <span class="setting-icon">🔗</span> API Endpoint
+        </label>
+        <input type="text" id="apiUrlInput" value="/api/generate-mindmap" placeholder="/api/generate-mindmap" />
+        <p class="api-note">⚠️ Never paste your API key here. Configure keys server-side only.</p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-row">
+        <button class="btn btn-primary" id="generateBtn" onclick="generateMindMap()">
+          <span class="btn-icon">✨</span> Generate Mind Map
+        </button>
+        <button class="btn btn-secondary" id="regenerateBtn" onclick="regenerateMindMap()" style="display:none;">
+          <span class="btn-icon">🔄</span> Regenerate
+        </button>
+        <button class="btn btn-ghost" onclick="clearAll()">
+          <span class="btn-icon">🗑️</span> Clear
+        </button>
+      </div>
+
+      <!-- Input Error -->
+      <div class="error-msg" id="inputError" style="display:none;"></div>
+    </section>
+
+    <!-- ===== MIND MAP SECTION ===== -->
+    <section class="card mindmap-section">
+      <div class="section-header">
+        <span class="section-icon">🗺️</span>
+        <h2>Mind Map</h2>
+        <div class="mindmap-controls" id="mapControls" style="display:none;">
+          <button class="map-ctrl-btn" onclick="zoomIn()" title="Zoom In">＋</button>
+          <button class="map-ctrl-btn" onclick="zoomOut()" title="Zoom Out">－</button>
+          <button class="map-ctrl-btn" onclick="resetView()" title="Reset View">⊙</button>
+          <button class="map-ctrl-btn" onclick="toggleFullscreen()" title="Fullscreen" id="fsBtn">⛶</button>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div class="mindmap-loader" id="mapLoader" style="display:none;">
+        <div class="loader-spinner"></div>
+        <p>🧠 Creating your mind map...</p>
+      </div>
+
+      <!-- Error state -->
+      <div class="error-msg" id="mapError" style="display:none;"></div>
+
+      <!-- Empty state -->
+      <div class="mindmap-empty" id="mapEmpty">
+        <div class="empty-icon">🧠</div>
+        <h3>Your mind map will appear here.</h3>
+        <p>Paste your syllabus and click <strong>Generate Mind Map</strong>.</p>
+      </div>
+
+      <!-- SVG Canvas -->
+      <div class="mindmap-canvas" id="mindmapCanvas" style="display:none;">
+        <svg id="mindmapSvg"></svg>
+      </div>
+    </section>
+
+    <!-- ===== NODE EXPLANATION SECTION ===== -->
+    <section class="card explain-section" id="explainSection" style="display:none;">
+      <div class="section-header">
+        <span class="section-icon">💡</span>
+        <h2>Selected Topic</h2>
+      </div>
+
+      <div class="selected-node-display" id="selectedNodeDisplay">
+        <span class="selected-node-title" id="selectedNodeTitle"></span>
+        <span class="selected-node-path" id="selectedNodePath"></span>
+      </div>
+
+      <button class="btn btn-accent" id="explainBtn" onclick="explainNode()">
+        <span class="btn-icon">📖</span> <span id="explainBtnLabel">Explain This Topic</span>
+      </button>
+
+      <div class="explain-loader" id="explainLoader" style="display:none;">
+        <div class="loader-spinner small"></div>
+        <span id="explainLoaderText">Generating explanation...</span>
+      </div>
+
+      <div class="explanation-body" id="explanationBody" style="display:none;"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <p>AI Mind Map Generator &nbsp;·&nbsp; Task 4 &nbsp;·&nbsp; AI Classroom Project</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

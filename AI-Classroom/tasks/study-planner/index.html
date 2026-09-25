@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Study Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ─── HEADER ─────────────────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">📚</span>
+        <span class="brand-name">AI Study Planner</span>
+      </div>
+
+      <!-- Mode Toggle -->
+      <div class="mode-toggle" role="group" aria-label="Mode selection">
+        <button class="mode-btn active" id="demoBtn" onclick="setMode('demo')">Demo</button>
+        <button class="mode-btn"        id="apiBtn"  onclick="setMode('api')">API</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── MAIN LAYOUT ────────────────────────────────────────────── -->
+  <main class="app-main">
+
+    <!-- ── LEFT SIDEBAR: INPUT FORM ─────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Plan Your Study</h2>
+        <p class="sidebar-subtitle">Fill in the details to generate your personalised plan</p>
+      </div>
+
+      <!-- API Key row (only visible in API mode) -->
+      <div class="api-key-row hidden" id="apiKeyRow">
+        <label class="field-label" for="apiKey">Groq API Key</label>
+        <input type="password" id="apiKey" class="field-input" placeholder="gsk_…" autocomplete="off" />
+      </div>
+
+      <form id="plannerForm" novalidate>
+
+        <!-- Subjects -->
+        <div class="field-group">
+          <label class="field-label" for="subjectsInput">
+            Subjects / Topics
+            <span class="field-hint">One per line</span>
+          </label>
+          <textarea
+            id="subjectsInput"
+            class="field-input"
+            rows="6"
+            placeholder="DBMS&#10;Java&#10;DSA&#10;Operating Systems&#10;Computer Networks"
+            required
+          ></textarea>
+        </div>
+
+        <!-- Exam Date -->
+        <div class="field-group">
+          <label class="field-label" for="examDate">Exam Date</label>
+          <input type="date" id="examDate" class="field-input" required />
+        </div>
+
+        <!-- Study Hours -->
+        <div class="field-group">
+          <label class="field-label" for="hoursPerDay">
+            Available Study Hours / Day
+            <span class="field-hint" id="hoursLabel">4 hrs</span>
+          </label>
+          <input
+            type="range"
+            id="hoursPerDay"
+            class="field-range"
+            min="1" max="12" value="4" step="0.5"
+            oninput="document.getElementById('hoursLabel').textContent = this.value + ' hrs'"
+          />
+          <div class="range-ticks">
+            <span>1</span><span>3</span><span>5</span><span>7</span><span>9</span><span>12</span>
+          </div>
+        </div>
+
+        <!-- Preferred Study Time -->
+        <div class="field-group">
+          <label class="field-label">Preferred Study Time</label>
+          <div class="chip-group" role="radiogroup" aria-label="Preferred study time">
+            <label class="chip">
+              <input type="radio" name="preferredTime" value="morning" />
+              <span>🌅 Morning</span>
+            </label>
+            <label class="chip">
+              <input type="radio" name="preferredTime" value="afternoon" />
+              <span>☀️ Afternoon</span>
+            </label>
+            <label class="chip">
+              <input type="radio" name="preferredTime" value="evening" checked />
+              <span>🌙 Evening</span>
+            </label>
+            <label class="chip">
+              <input type="radio" name="preferredTime" value="flexible" />
+              <span>🔄 Flexible</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Preparation Level -->
+        <div class="field-group">
+          <label class="field-label">Current Preparation Level</label>
+          <div class="chip-group" role="radiogroup" aria-label="Preparation level">
+            <label class="chip">
+              <input type="radio" name="level" value="beginner" />
+              <span>🌱 Beginner</span>
+            </label>
+            <label class="chip">
+              <input type="radio" name="level" value="intermediate" checked />
+              <span>📗 Intermediate</span>
+            </label>
+            <label class="chip">
+              <input type="radio" name="level" value="advanced" />
+              <span>🚀 Advanced</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Priority -->
+        <div class="field-group">
+          <label class="field-label">Subject Priority</label>
+          <div class="chip-group" role="radiogroup" aria-label="Subject priority">
+            <label class="chip">
+              <input type="radio" name="priority" value="equal" checked />
+              <span>⚖️ Equal</span>
+            </label>
+            <label class="chip">
+              <input type="radio" name="priority" value="weak-first" />
+              <span>🎯 Weak Subjects First</span>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" class="generate-btn" id="generateBtn">
+          <span class="btn-icon">✨</span>
+          Generate Study Plan
+        </button>
+
+      </form>
+    </aside>
+
+    <!-- ── RIGHT PANEL: RESULTS ───────────────────────────────────── -->
+    <section class="results-panel" id="resultsPanel">
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-illustration">📖</div>
+        <h3 class="empty-title">Plan Your Preparation</h3>
+        <p class="empty-text">Fill in the form and click <strong>Generate Study Plan</strong> to stay on track.</p>
+        <ul class="empty-features">
+          <li>✅ Day-by-day study schedule</li>
+          <li>✅ Progress tracking</li>
+          <li>✅ Today's tasks highlighted</li>
+          <li>✅ Calendar &amp; list views</li>
+        </ul>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state hidden" id="loadingState">
+        <div class="loader-ring"></div>
+        <p class="loader-text">📚 Creating your personalised study plan…</p>
+      </div>
+
+      <!-- ── DASHBOARD (shown after plan is generated) ─────────── -->
+      <div class="dashboard hidden" id="dashboard">
+
+        <!-- Stats Bar -->
+        <div class="stats-bar" id="statsBar">
+          <div class="stat-card" id="statTotal">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Total Hours</span>
+          </div>
+          <div class="stat-card stat-done" id="statDone">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat-card stat-remain" id="statRemain">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Remaining</span>
+          </div>
+          <div class="stat-card stat-pct" id="statPct">
+            <span class="stat-value">0%</span>
+            <span class="stat-label">Progress</span>
+          </div>
+          <div class="stat-card stat-days" id="statDays">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Days Left</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">Overall Progress</span>
+            <span class="progress-pct" id="progressPct">0%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressTrack">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <!-- Today's Tasks -->
+        <div class="today-section" id="todaySection">
+          <div class="section-header">
+            <h3 class="section-title">
+              <span class="section-icon">📅</span> Today's Study Plan
+            </h3>
+            <span class="today-date" id="todayDate"></span>
+          </div>
+          <div id="todayTasks" class="today-tasks">
+            <p class="no-today">No study tasks scheduled for today.</p>
+          </div>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="view-toggle-row">
+          <div class="view-toggle" role="group" aria-label="Plan view">
+            <button class="view-btn active" id="listViewBtn"     onclick="switchView('list')">☰ List View</button>
+            <button class="view-btn"        id="calendarViewBtn" onclick="switchView('calendar')">🗓 Calendar View</button>
+          </div>
+          <span class="plan-meta" id="planMeta"></span>
+        </div>
+
+        <!-- List View -->
+        <div id="listView" class="plan-view">
+          <div id="planDays" class="plan-days"></div>
+        </div>
+
+        <!-- Calendar View -->
+        <div id="calendarView" class="plan-view hidden">
+          <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+
+      </div><!-- /dashboard -->
+
+    </section><!-- /results-panel -->
+
+  </main>
+
+  <!-- ─── TOAST ──────────────────────────────────────────────────── -->
+  <div class="toast hidden" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

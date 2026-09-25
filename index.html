@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Turn study material into clear, structured revision notes with AI.">
+  <title>AI Notes Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="AI Notes Generator home"><span class="brand-mark" aria-hidden="true">✦</span><span>AI Notes Generator</span></a>
+      <span class="header-note"><span class="status-dot"></span> Study smarter, not longer</span>
+    </div>
+  </header>
+  <main id="top" class="app-shell">
+    <section class="intro" aria-labelledby="page-title">
+      <div><p class="eyebrow">TASK 02 <span></span> AI CLASSROOM</p><h1 id="page-title">Make every<br><em>lesson count.</em></h1><p class="intro-copy">Turn any textbook paragraph, lecture, or chapter into clear revision notes you will actually want to revisit.</p></div>
+      <div class="intro-meta" aria-label="Notes generator benefits"><div><strong>01</strong><span>Paste material</span></div><div><strong>02</strong><span>Shape with AI</span></div><div><strong>03</strong><span>Revise clearly</span></div></div>
+    </section>
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+    <div class="workspace-grid">
+      <section class="panel input-panel" aria-labelledby="material-title">
+        <div class="panel-heading"><div><p class="section-kicker">STUDY MATERIAL</p><h2 id="material-title">Paste your material</h2></div><span class="mode-badge">DEMO MODE</span></div>
+        <label for="study-material">Paste your study material</label>
+        <textarea id="study-material" rows="18" placeholder="Paste a topic, textbook paragraph, lecture notes, or chapter summary here..."></textarea>
+        <div class="input-footer"><span id="character-count">0 characters</span><span>Recommended: 100 - 8,000 characters</span></div>
+        <div class="input-actions"><button class="button button-primary" id="generate-button" type="button"><span aria-hidden="true">✦</span> Generate Notes</button><button class="button button-quiet" id="example-button" type="button">Try Example</button><button class="button button-quiet" id="clear-button" type="button">Clear</button></div>
+        <p class="privacy-note"><span aria-hidden="true">◇</span> Your content is used only to create this study session.</p>
+      </section>
+      <section class="panel notes-panel" aria-labelledby="notes-title">
+        <div class="panel-heading"><div><p class="section-kicker">AI OUTPUT</p><h2 id="notes-title">Generated notes</h2></div><span class="notes-state" id="notes-state">WAITING</span></div>
+        <div class="notes-output" id="notes-output" aria-live="polite"><div class="empty-state"><div class="empty-icon" aria-hidden="true">✎</div><h3>Your notes will appear here</h3><p>Paste your study material and let AI turn it into revision-friendly notes.</p></div></div>
+        <div class="notes-actions" id="notes-actions" hidden><button class="button button-action" id="copy-button" type="button">▣ Copy Notes</button><button class="button button-action" id="download-text-button" type="button">↓ Download TXT</button><button class="button button-action" id="print-button" type="button">↗ Download PDF</button></div>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer"><span>AI Notes Generator</span><span>Made for focused learning.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

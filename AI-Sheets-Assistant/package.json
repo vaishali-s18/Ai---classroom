@@ -1,0 +1,26 @@
+{
+  "name": "ai-sheets-assistant",
+  "version": "1.0.0",
+  "description": "AI Google Sheets Assistant - Task 5 AI Classroom Project",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node backend/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "groq-sdk": "^0.15.0"
+  },
+  "keywords": [
+    "sheets",
+    "spreadsheet",
+    "ai",
+    "groq",
+    "data-analysis",
+    "classroom"
+  ],
+  "author": "",
+  "license": "ISC"
+}

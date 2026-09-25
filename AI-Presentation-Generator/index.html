@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate polished classroom presentations with AI.">
+  <title>AI Presentation Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="AI Presentation Generator home"><span class="brand-icon" aria-hidden="true">✦</span><span>AI Presentation Generator</span></a>
+    <span class="header-status"><span class="pulse"></span> Demo mode ready</span>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow">TASK 03 <span></span> AI CLASSROOM</p>
+        <h1 id="page-title">Ideas into<br><em>slides.</em></h1>
+        <p>Turn a topic into a clear, ready-to-present classroom deck. Shape the brief, then let AI give your thinking a strong structure.</p>
+      </div>
+      <div class="hero-mark" aria-hidden="true"><span>01</span><span>02</span><span>03</span></div>
+    </section>
+
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+
+    <section class="creator-layout" aria-label="Presentation creator">
+      <section class="creator-panel" aria-labelledby="creator-title">
+        <div class="section-heading"><div><p class="section-kicker">THE BRIEF</p><h2 id="creator-title">Create your presentation</h2></div><span class="mode-badge">DEMO MODE</span></div>
+        <form id="presentation-form" novalidate>
+          <div class="field">
+            <label for="topic">Enter Your Topic <span aria-hidden="true">*</span></label>
+            <input id="topic" name="topic" type="text" placeholder="Enter any topic of your choice..." autocomplete="off" required>
+          </div>
+          <div class="field">
+            <label for="instructions">Additional Context</label>
+            <textarea id="instructions" name="instructions" rows="4" placeholder="Add your project details, notes, source material, or any specific information you want included..."></textarea>
+          </div>
+          <div class="field slide-count-field">
+            <label for="slide-count">Number of slides</label>
+            <div class="slide-options" role="radiogroup" aria-label="Number of slides">
+              <label class="slide-option recommended"><input type="radio" name="slideCount" value="5"><span>5<small>focused</small></span></label>
+              <label class="slide-option recommended selected"><input type="radio" name="slideCount" value="6" checked><span>6<small>recommended</small></span></label>
+              <label class="slide-option"><input type="radio" name="slideCount" value="7"><span>7<small>expanded</small></span></label>
+              <label class="slide-option"><input type="radio" name="slideCount" value="8"><span>8<small>deep dive</small></span></label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="button button-primary" id="generate-button" type="submit"><span aria-hidden="true">✦</span> Generate Presentation</button>
+            <button class="button button-quiet" id="clear-button" type="button">Clear</button>
+          </div>
+        </form>
+        <p class="privacy-note"><span aria-hidden="true">◇</span> Your API key stays on the server. Demo mode lets you explore the full workflow locally.</p>
+      </section>
+
+      <section class="viewer-panel" aria-labelledby="viewer-title">
+        <div class="viewer-toolbar">
+          <div><p class="section-kicker">LIVE DECK</p><h2 id="viewer-title">Your presentation</h2></div>
+          <div class="deck-actions"><button class="button button-quiet" id="regenerate-button" type="button" disabled><span aria-hidden="true">↻</span> Regenerate</button><button class="button button-export" id="export-button" type="button" disabled><span aria-hidden="true">↓</span> Download PPTX</button></div>
+        </div>
+        <div class="deck-meta" id="deck-meta" hidden><strong id="deck-title">Presentation title</strong><span id="deck-count">6 slides</span></div>
+        <div class="slide-stage" id="slide-stage" aria-live="polite">
+          <div class="empty-state"><div class="empty-icon" aria-hidden="true">▧</div><h3>Your presentation will appear here.</h3><p>Enter a topic and let AI create your slide deck.</p></div>
+        </div>
+        <div class="viewer-controls" id="viewer-controls" hidden>
+          <button class="button button-nav" id="previous-button" type="button"><span aria-hidden="true">←</span> Previous</button>
+          <div class="slide-position"><span id="slide-number">1 / 6</span><div class="slide-dots" id="slide-dots" aria-label="Slide indicators"></div></div>
+          <button class="button button-nav" id="next-button" type="button">Next <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+    </section>
+    <p class="keyboard-note"><kbd>←</kbd><kbd>→</kbd> Use your arrow keys to move through the deck.</p>
+  </main>
+  <footer class="site-footer"><span>AI Presentation Generator</span><span>Structure first. Present with clarity.</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>
