@@ -32,13 +32,40 @@ function buildNotesPrompt(material) {
   return `You are an expert academic tutor.\n\nConvert the following study material into short, clear, and well-structured study notes.\n\nRequirements:\n- Create a suitable main heading.\n- Organize the content using meaningful headings and subheadings.\n- Use concise bullet points.\n- Highlight important definitions and concepts using bold text.\n- Include important formulas, examples, or keywords when present in the source.\n- Do not add unrelated information.\n- Do not invent facts that are not supported by the source material.\n- Preserve important technical terminology.\n- Make the notes easy for a student to revise.\n- Keep the notes concise but complete.\n- Return ONLY valid Markdown.\n- Do not wrap the response in a code block.\n\nStudy Material:\n\n${material}`;
 }
 
+function normalizeTopic(text) {
+  return text.replace(/^Topic:\s*/i, '').trim();
+}
+
+function toTitleCase(value) {
+  return value.replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function extractFacts(material) {
+  const cleaned = material.replace(/^Topic:\s*.*$/im, '').replace(/\s+/g, ' ').trim();
+  return cleaned
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter((sentence) => sentence.length > 35)
+    .slice(0, 6);
+}
+
+function extractKeywords(material) {
+  const words = (material.match(/[A-Za-z][A-Za-z-]{3,}/g) || []).map((word) => word.toLowerCase());
+  const ignore = new Set(['this', 'that', 'with', 'from', 'into', 'your', 'study', 'material', 'about', 'these', 'those', 'have', 'been', 'which', 'would', 'their', 'there', 'after', 'before', 'when', 'where', 'while', 'topic', 'notes', 'generate', 'learn', 'using']);
+  return [...new Set(words.filter((word) => !ignore.has(word)))].slice(0, 8);
+}
+
 function createMockMarkdown(material) {
-  const topic = material.match(/^Topic:\s*(.+)$/im)?.[1] || 'Study Material';
-  const sentences = material.replace(/^Topic:.+$/im, '').split(/(?<=[.!?])\s+/).map((item) => item.trim()).filter((item) => item.length > 35);
-  const definition = sentences[0] || 'Review the provided material and identify its central idea.';
-  const functions = [...new Set((material.match(/\b(?:process management|memory management|file management|device management|security|CPU scheduling)\b/gi) || []).map((item) => item.toLowerCase()))];
-  const concepts = functions.length ? functions.map((item) => `- **${item.replace(/\b\w/g, (letter) => letter.toUpperCase())}**: A core area described in the source material.`).join('\n') : '- Review the major terms and relationships described in the source.';
-  return `# ${topic}: Revision Notes\n\n## Definition\n\n**${topic}**: ${definition}\n\n## Key Concepts\n\n${concepts}\n\n## Important Points\n\n${sentences.slice(1, 5).map((sentence) => `- ${sentence}`).join('\n') || '- The source contains the main concepts needed for revision.'}\n\n## Quick Review\n\n> Focus on the definitions, functions, and examples that appear in the original material.\n\n**Keywords:** ${functions.join(', ') || topic}`;
+  const topic = normalizeTopic(material.match(/^Topic:\s*(.+)$/im)?.[1] || 'Study Material');
+  const facts = extractFacts(material);
+  const keywords = extractKeywords(material);
+  const definition = facts[0] || 'This topic is best understood by focusing on the core idea, supporting examples, and the main relationships between concepts.';
+  const concepts = keywords.length
+    ? keywords.map((keyword) => `- **${toTitleCase(keyword)}**: A key concept or idea that should be remembered when revising ${topic}.`).join('\n')
+    : '- **Core idea**: Review the main concept and how it connects to the supporting examples.';
+  const importantPoints = facts.slice(1, 5).map((sentence) => `- ${sentence}`).join('\n');
+
+  return `# ${topic}: Revision Notes\n\n## Definition\n\n**${topic}**: ${definition}\n\n## Key Concepts\n\n${concepts}\n\n## Important Points\n\n${importantPoints || '- Focus on the central idea, examples, and any comparisons mentioned in the material.'}\n\n## Quick Review\n\n> Revisit the definition, the main examples, and the most important keywords before testing yourself.\n\n**Keywords:** ${keywords.map((keyword) => `**${toTitleCase(keyword)}**`).join(', ') || `**${topic}**`}`;
 }
 
 async function requestNotes(material) {

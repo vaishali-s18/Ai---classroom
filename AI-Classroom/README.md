@@ -12,6 +12,17 @@ python -m http.server 8123
 
 Open `/AI-Classroom/` in the browser.
 
+## Current project status
+
+This project is a demo-first classroom prototype. Some tools simulate AI responses locally, some features require backend wiring to work with real APIs, and OCR plus Sheets workflows remain partial. The front-end dashboard is fully usable as a static learning prototype, but it is not yet a production-grade AI platform.
+
+## Next improvements
+
+- Replace simulated generation with real API-backed endpoints for the tool workflows that need live responses.
+- Complete the OCR pipeline and file-processing flow for real image extraction.
+- Finish Sheets Assistant logic and validation for real spreadsheet operations.
+- Keep the project deployment-friendly by separating frontend, backend, and environment configuration cleanly.
+
 ## Integrated Tasks
 
 - `tasks/resume-builder` — Task 1: AI Resume Builder

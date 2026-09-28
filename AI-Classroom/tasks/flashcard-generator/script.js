@@ -44,11 +44,30 @@ function topicLabel(text) { return text.trim().split(/\s+/).slice(0, 7).join(' '
 function createDemoCards(topic, numberOfCards, difficulty) {
   const facts = splitFacts(topic);
   if (!facts.length) throw new Error('empty-material');
+
   const label = topicLabel(topic);
   return Array.from({ length: numberOfCards }, (_, index) => {
     const fact = facts[index % facts.length];
-    const questionStyles = ['What is the key idea in this statement?', 'Why is this concept important?', 'How would you explain this idea to a classmate?', 'What should you remember about this concept?'];
-    return { question: `${questionStyles[index % questionStyles.length]} (${label})`, answer: fact, difficulty, important: false, status: 'unseen', reviewed: false };
+    const keyword = fact.split(/\s+/).filter((word) => word.length > 4)[0] || 'key concept';
+    const questionStyles = [
+      `What is the main point in this statement about ${label}?`,
+      `Why is ${keyword} important in ${label}?`,
+      `How would you explain this idea to a classmate?`,
+      `What should you remember when revising this concept?`
+    ];
+
+    const answerText = difficulty === 'hard'
+      ? `This idea emphasizes the relationship between ${keyword} and the broader concept of ${label}. It is important because it captures the source material's central point and helps explain how the topic functions in practice.`
+      : `This concept is important because it captures the main idea from the source material. It helps you remember how ${label} works and why it matters.`;
+
+    return {
+      question: `${questionStyles[index % questionStyles.length]}`,
+      answer: `${fact}. ${answerText}`,
+      difficulty,
+      important: false,
+      status: 'unseen',
+      reviewed: false
+    };
   });
 }
 async function requestCards(topic, numberOfCards, difficulty) {

@@ -41,28 +41,62 @@ function buildQuizPrompt(topic, numberOfQuestions, difficulty, questionType) {
 }
 
 function splitFacts(topic) {
-  return topic.split(/\n+|(?<=[.!?])\s+|,\s+|;\s+|\s+and\s+/i).map((fact) => fact.trim().replace(/^[-*]\s*/, '')).filter((fact) => fact.length > 10);
+  return topic
+    .split(/\n+|(?<=[.!?])\s+|;\s+|,\s+(?=[A-Za-z])|\s+and\s+/i)
+    .map((fact) => fact.trim().replace(/^[-*]\s*/, ''))
+    .filter((fact) => fact.length > 12)
+    .slice(0, 12);
 }
+
 function makeDistractors(fact, index) {
-  const topicWord = fact.replace(/[.,!?;:]/g, '').split(/\s+/).find((word) => word.length > 4) || 'the concept';
-  return [`${topicWord} is unrelated to the supplied material`, 'Only memorizing the term is required', 'It applies in every situation without conditions'];
+  const words = fact.replace(/[.,!?;:]/g, '').split(/\s+/).filter((word) => word.length > 4);
+  const anchor = words[index % Math.max(words.length, 1)] || 'the concept';
+  return [
+    `${anchor} is not directly supported by the source material.`,
+    `The source focuses on a different idea than ${anchor.toLowerCase()}.`,
+    `This statement is too broad and does not match the specific idea in the material.`
+  ];
 }
+
 function createDemoQuiz(topic, numberOfQuestions, difficulty, questionType) {
   const facts = splitFacts(topic);
   if (!facts.length) throw new Error('demo-context');
+
   const questions = Array.from({ length: numberOfQuestions }, (_, index) => {
     const fact = facts[index % facts.length];
     const useTrueFalse = questionType === 'true-false' || (questionType === 'mixed' && index % 2 === 1);
+
     if (useTrueFalse) {
-      const statement = index % 3 === 0 ? fact : `The material states that ${fact.charAt(0).toLowerCase()}${fact.slice(1)}`;
-      return { question: `True or False: ${statement}`, type: 'true-false', options: ['True', 'False'], correctAnswer: 0, explanation: fact };
+      const statement = index % 2 === 0
+        ? `The source material supports the idea that: ${fact}`
+        : `The source material does not support the claim that: ${fact}`;
+
+      return {
+        question: `True or False: ${statement}`,
+        type: 'true-false',
+        options: ['True', 'False'],
+        correctAnswer: index % 2 === 0 ? 0 : 1,
+        explanation: `The material supports ${index % 2 === 0 ? 'this idea' : 'a different idea'} because it is grounded in the source content.`
+      };
     }
-    const correct = index % 4;
-    const options = makeDistractors(fact, index);
-    options.splice(correct, 0, fact);
-    return { question: `Which statement is supported by the study material?`, type: 'mcq', options: options.slice(0, 4), correctAnswer: correct, explanation: fact, sourceFact: fact, difficulty };
+
+    const correctAnswerText = fact;
+    const incorrectOptions = makeDistractors(fact, index);
+    const options = [correctAnswerText, ...incorrectOptions].slice(0, 4);
+    const correctIndex = 0;
+
+    return {
+      question: `Which statement is best supported by the study material?`,
+      type: 'mcq',
+      options,
+      correctAnswer: correctIndex,
+      explanation: `The correct answer matches the source material most closely: ${fact}`,
+      sourceFact: fact,
+      difficulty
+    };
   });
-  return { title: `${topic.trim()} Quiz`, questions };
+
+  return { title: `${topic.trim().slice(0, 48) || 'Study'} Quiz`, questions };
 }
 
 async function requestQuiz(topic, numberOfQuestions, difficulty, questionType) {
