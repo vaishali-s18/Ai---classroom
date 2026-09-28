@@ -14,10 +14,17 @@ const Groq     = require('groq-sdk');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+const MODEL = process.env.GROQ_MODEL || 'openai/gpt-oss-20b';
 
 /* ── Middleware ─────────────────────────────────────────────────── */
 app.use(cors({
-  origin: ['http://localhost:5500', 'http://127.0.0.1:5500', 'null'],
+  origin: [
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'null'
+  ],
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'x-api-key']
 }));
@@ -65,7 +72,7 @@ app.post('/api/generate-study-plan', async (req, res) => {
     const groq = new Groq({ apiKey });
 
     const completion = await groq.chat.completions.create({
-      model    : 'llama3-70b-8192',
+      model    : MODEL,
       messages : [
         {
           role   : 'system',

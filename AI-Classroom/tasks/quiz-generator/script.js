@@ -49,12 +49,11 @@ function splitFacts(topic) {
 }
 
 function makeDistractors(fact, index) {
-  const words = fact.replace(/[.,!?;:]/g, '').split(/\s+/).filter((word) => word.length > 4);
-  const anchor = words[index % Math.max(words.length, 1)] || 'the concept';
+  const claim = `${fact.charAt(0).toLowerCase()}${fact.slice(1).replace(/[.!?]$/, '')}`;
   return [
-    `${anchor} is not directly supported by the source material.`,
-    `The source focuses on a different idea than ${anchor.toLowerCase()}.`,
-    `This statement is too broad and does not match the specific idea in the material.`
+    `The source does not state that ${claim}.`,
+    `The material gives a different account and does not support the claim that ${claim}.`,
+    `No evidence for this statement appears in the supplied material: ${fact}`
   ];
 }
 

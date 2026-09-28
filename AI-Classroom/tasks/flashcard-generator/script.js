@@ -40,29 +40,27 @@ function hideStatus() { statusMessage.hidden = true; statusMessage.textContent =
 function updateCount() { inputCount.textContent = `${topicInput.value.length.toLocaleString()} characters`; }
 function escapeHtml(value) { return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[character])); }
 function splitFacts(text) { return text.split(/\n+|(?<=[.!?])\s+|;\s+|,\s+(?=[A-Za-z])/).map((fact) => fact.trim().replace(/^[-*]\s*/, '')).filter((fact) => fact.length > 18); }
-function topicLabel(text) { return text.trim().split(/\s+/).slice(0, 7).join(' '); }
+function factSubject(fact) {
+  const subject = fact.match(/^(.{1,70}?)\s+(?:is|are|was|were|means|includes|include|converts|captures|absorbs|uses|contains|produces|release|releases|defines|lets|protects|allows|hides|splits)\b/i)?.[1];
+  return (subject || fact.split(/\s+/).slice(0, 4).join(' ')).replace(/^(?:the|a|an)\s+/i, '');
+}
 function createDemoCards(topic, numberOfCards, difficulty) {
   const facts = splitFacts(topic);
   if (!facts.length) throw new Error('empty-material');
 
-  const label = topicLabel(topic);
   return Array.from({ length: numberOfCards }, (_, index) => {
     const fact = facts[index % facts.length];
-    const keyword = fact.split(/\s+/).filter((word) => word.length > 4)[0] || 'key concept';
+    const subject = factSubject(fact);
     const questionStyles = [
-      `What is the main point in this statement about ${label}?`,
-      `Why is ${keyword} important in ${label}?`,
-      `How would you explain this idea to a classmate?`,
-      `What should you remember when revising this concept?`
+      `What does the source state about ${subject}?`,
+      `How does the material describe ${subject}?`,
+      `What should you recall about ${subject}?`,
+      `State one key fact about ${subject}.`
     ];
 
-    const answerText = difficulty === 'hard'
-      ? `This idea emphasizes the relationship between ${keyword} and the broader concept of ${label}. It is important because it captures the source material's central point and helps explain how the topic functions in practice.`
-      : `This concept is important because it captures the main idea from the source material. It helps you remember how ${label} works and why it matters.`;
-
     return {
-      question: `${questionStyles[index % questionStyles.length]}`,
-      answer: `${fact}. ${answerText}`,
+      question: questionStyles[index % questionStyles.length],
+      answer: /[.!?]$/.test(fact) ? fact : `${fact}.`,
       difficulty,
       important: false,
       status: 'unseen',

@@ -56,14 +56,23 @@ function extractKeywords(material) {
 }
 
 function createMockMarkdown(material) {
-  const topic = normalizeTopic(material.match(/^Topic:\s*(.+)$/im)?.[1] || 'Study Material');
   const facts = extractFacts(material);
   const keywords = extractKeywords(material);
-  const definition = facts[0] || 'This topic is best understood by focusing on the core idea, supporting examples, and the main relationships between concepts.';
-  const concepts = keywords.length
-    ? keywords.map((keyword) => `- **${toTitleCase(keyword)}**: A key concept or idea that should be remembered when revising ${topic}.`).join('\n')
+  const firstFact = facts[0] || '';
+  const inferredTopic = firstFact.match(/^([A-Z][A-Za-z-]*(?:\s+[A-Za-z][A-Za-z-]*){0,2})\s+(?:is|are|was|were|means|refers to|converts|absorbs|uses|contains|produces|releases|splits)\b/i)?.[1]
+    || firstFact.split(/\s+/).slice(0, 3).join(' ');
+  const topic = normalizeTopic(material.match(/^Topic:\s*(.+)$/im)?.[1] || inferredTopic || 'Study Material');
+  const definition = firstFact.toLowerCase().startsWith(topic.toLowerCase())
+    ? firstFact.slice(topic.length).trim()
+    : firstFact || 'This topic is best understood by focusing on the core idea, supporting examples, and the main relationships between concepts.';
+  const conceptFacts = facts.length > 1 ? facts.slice(1, 4) : facts;
+  const concepts = conceptFacts.length
+    ? conceptFacts.map((fact) => {
+      const match = fact.match(/^(.+?)\s+(is|are|was|were|means|refers to|converts|absorbs|uses|contains|produces|releases|split|splits)\s+(.+)$/i);
+      return match ? `- **${match[1]}** ${match[2]} ${match[3]}` : `- ${fact}`;
+    }).join('\n')
     : '- **Core idea**: Review the main concept and how it connects to the supporting examples.';
-  const importantPoints = facts.slice(1, 5).map((sentence) => `- ${sentence}`).join('\n');
+  const importantPoints = facts.slice(4, 6).map((sentence) => `- ${sentence}`).join('\n') || '- Review the supporting details in Key Concepts.';
 
   return `# ${topic}: Revision Notes\n\n## Definition\n\n**${topic}**: ${definition}\n\n## Key Concepts\n\n${concepts}\n\n## Important Points\n\n${importantPoints || '- Focus on the central idea, examples, and any comparisons mentioned in the material.'}\n\n## Quick Review\n\n> Revisit the definition, the main examples, and the most important keywords before testing yourself.\n\n**Keywords:** ${keywords.map((keyword) => `**${toTitleCase(keyword)}**`).join(', ') || `**${topic}**`}`;
 }

@@ -16,7 +16,7 @@ A professional, responsive web application that generates a personalised day-by-
 | List view | Collapsible day cards with full task details |
 | Calendar view | Month grid with subject pills; click a day to jump to it |
 | Demo Mode | Works fully offline — no API key needed |
-| API Mode | Connects to Express + Groq (llama3-70b-8192) backend |
+| API Mode | Connects to Express + Groq; key can come from backend `.env` or the app |
 | Responsive | Mobile-first, works on all screen sizes |
 
 ---
@@ -58,7 +58,7 @@ npm install
 ```bash
 copy .env.example .env
 ```
-Edit `.env` and replace `your_groq_api_key_here` with your key from [console.groq.com](https://console.groq.com).
+Edit `.env` and replace `your_groq_api_key_here` with your key from [console.groq.com](https://console.groq.com). The app can also send a key entered in its API mode field.
 
 **Step 3 — Start the server**
 ```bash
@@ -70,7 +70,7 @@ npm run dev
 **Step 4 — Use the app**
 1. Open `index.html` in your browser (use Live Server on port 5500).
 2. Click the **API** button in the header.
-3. Enter your Groq API key in the field that appears.
+3. Leave the key field empty if `GROQ_API_KEY` is configured in the backend `.env`; otherwise enter your key in the field.
 4. Generate your plan.
 
 ---
@@ -145,7 +145,7 @@ The Demo Mode engine (`script.js`) generates a fully dynamic plan without any ne
 | Frontend | HTML5 · CSS3 · Vanilla JS (ES2022) |
 | Fonts | Inter (Google Fonts) |
 | Backend | Node.js · Express 4 |
-| AI Model | Groq — llama3-70b-8192 |
+| AI Model | Groq — `openai/gpt-oss-20b` (configurable with `GROQ_MODEL`) |
 | Env config | dotenv |
 | CORS | cors |
 

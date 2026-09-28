@@ -412,7 +412,6 @@ function interleaveBySubject(queue, numSubjects) {
    ═══════════════════════════════════════════════════════════════ */
 async function fetchApiPlan({ subjects, examDate, hoursPerDay, preferredTime, level, priority }) {
   const apiKey = $('apiKey')?.value?.trim();
-  if (!apiKey) throw new Error('Please enter your Groq API key.');
 
   const body = {
     subjects,
@@ -427,7 +426,7 @@ async function fetchApiPlan({ subjects, examDate, hoursPerDay, preferredTime, le
     method : 'POST',
     headers: {
       'Content-Type' : 'application/json',
-      'x-api-key'    : apiKey
+      ...(apiKey ? { 'x-api-key': apiKey } : {})
     },
     body: JSON.stringify(body)
   });
